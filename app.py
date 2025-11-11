@@ -9,6 +9,21 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
+# --- ADS ---
+st.markdown("""
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2391186981906606"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2391186981906606"
+     data-ad-slot="YOUR_SLOT_ID"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+""", unsafe_allow_html=True)
+
 # --- CONFIG ---
 DATA_FILE = "nrl_data.xlsx"
 MODEL_FILE = "nrl_model.pkl"
@@ -125,4 +140,5 @@ if st.button("Predict Match"):
             "Expected Score": f"{result['Avg Home Score']:.0f} – {result['Avg Away Score']:.0f}"
         })
     else:
+
         st.error("Could not predict. Check team names.")
