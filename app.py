@@ -9,6 +9,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
+# Google Search Console Verification (Remove after indexing)
+st.markdown("""
+<meta name="google-site-verification" content="tBordOIFJNQRbb7Q7jalNy3A5WtqKmmeTbuf2R1Xh7Y" />
+""", unsafe_allow_html=True)
+
+
 # --- ADS ---
 st.markdown("""
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2391186981906606"
@@ -142,3 +148,4 @@ if st.button("Predict Match"):
     else:
 
         st.error("Could not predict. Check team names.")
+
