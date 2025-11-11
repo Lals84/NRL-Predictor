@@ -11,7 +11,7 @@ from sklearn.preprocessing import LabelEncoder
 
 # Google Search Console Verification (Remove after indexing)
 st.markdown("""
-<meta name="google-site-verification" content="tBordOIFJNQRbb7Q7jalNy3A5WtqKmmeTbuf2R1Xh7Y" />
+<meta name="google-site-verification" google-site-verification=tBordOIFJNQRbb7Q7jalNy3A5WtqKmmeTbuf2R1Xh7Y />
 """, unsafe_allow_html=True)
 
 # --- GOOGLE ADSENSE ACCOUNT TAG (Required for AdSense to work) ---
@@ -27,7 +27,7 @@ st.markdown("""
 <ins class="adsbygoogle"
      style="display:block"
      data-ad-client="ca-pub-2391186981906606"
-     data-ad-slot="YOUR_SLOT_ID"
+     data-ad-slot="3460661067"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 <script>
@@ -153,6 +153,7 @@ if st.button("Predict Match"):
     else:
 
         st.error("Could not predict. Check team names.")
+
 
 
 
