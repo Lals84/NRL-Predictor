@@ -14,6 +14,7 @@ st.markdown("""
 <meta name="google-site-verification" content="tBordOIFJNQRbb7Q7jalNy3A5WtqKmmeTbuf2R1Xh7Y" />
 """, unsafe_allow_html=True)
 
+<meta name="google-adsense-account" content="ca-pub-2391186981906606">
 
 # --- ADS ---
 st.markdown("""
@@ -148,4 +149,5 @@ if st.button("Predict Match"):
     else:
 
         st.error("Could not predict. Check team names.")
+
 
