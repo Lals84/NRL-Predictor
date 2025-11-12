@@ -9,6 +9,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
+# Serve verification file (add after imports)
+if 'google' in st.experimental_get_query_params().to_dict().get('file', []):
+    with open('google-verification.html', 'r') as f:
+        st.markdown(f.read(), unsafe_allow_html=True)
+
 # Google Search Console Verification (Remove after indexing)
 st.markdown("""
 <meta name="google-site-verification" google-site-verification=tBordOIFJNQRbb7Q7jalNy3A5WtqKmmeTbuf2R1Xh7Y />
@@ -153,6 +158,7 @@ if st.button("Predict Match"):
     else:
 
         st.error("Could not predict. Check team names.")
+
 
 
 
