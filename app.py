@@ -10,16 +10,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CDBJR4TWT8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CDBJR4TWT8');
-</script>
-
 # Force AdSense verification into HTML head
 from streamlit.components.v1 import html
 
@@ -50,6 +40,18 @@ if 'google' in st.query_params.get('file', []):
     st.title("NRL Predictor")
     st.info("App verified. Ready for NRL 2026!")
     st.stop()
+
+# === GOOGLE TAG (gtag.js) FOR VERIFICATION & ANALYTICS ===
+st.markdown("""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YOUR_MEASUREMENT_ID');
+</script>
+""", unsafe_allow_html=True)
 
 # === DEFINE SEASON & ROSTER BOOSTS EARLY (CRITICAL FIX) ===
 st.sidebar.header("NRL Predictor Settings")
@@ -304,5 +306,6 @@ if st.sidebar.button("Show 2025 Accuracy"):
 # === FOOTER ===
 st.markdown("---")
 st.caption("NRL Predictor v3.2 | ML + Elo + Monte Carlo | AdSense Live")
+
 
 
