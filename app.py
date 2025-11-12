@@ -44,12 +44,12 @@ if 'google' in st.query_params.get('file', []):
 # === GOOGLE TAG (gtag.js) FOR VERIFICATION & ANALYTICS ===
 st.markdown("""
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_MEASUREMENT_ID"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CDBJR4TWT8"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-YOUR_MEASUREMENT_ID');
+  gtag('config', 'G-CDBJR4TWT8');
 </script>
 """, unsafe_allow_html=True)
 
@@ -306,6 +306,7 @@ if st.sidebar.button("Show 2025 Accuracy"):
 # === FOOTER ===
 st.markdown("---")
 st.caption("NRL Predictor v3.2 | ML + Elo + Monte Carlo | AdSense Live")
+
 
 
 
