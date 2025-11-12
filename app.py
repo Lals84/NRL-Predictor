@@ -10,6 +10,31 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
+# Force AdSense verification into HTML head
+from streamlit.components.v1 import html
+
+def inject_adsense_verification():
+    verification_code = '''
+    <script>
+    (function() {
+        var meta = document.createElement('meta');
+        meta.name = 'google-site-verification';
+        meta.content = 'tBordOIFJNQRbb7Q7jalNy3A5WtqKmmeTbuf2R1Xh7Y';
+        document.head.appendChild(meta);
+        
+        // Also inject AdSense account meta
+        var adsMeta = document.createElement('meta');
+        adsMeta.name = 'google-adsense-account';
+        adsMeta.content = 'ca-pub-2391186981906606';
+        document.head.appendChild(adsMeta);
+    })();
+    </script>
+    '''
+    html(verification_code, height=0)  # Invisible iframe
+
+# Call it early
+inject_adsense_verification()
+
 # === GOOGLE VERIFICATION ===
 if 'google' in st.query_params.get('file', []):
     st.title("NRL Predictor")
@@ -269,3 +294,4 @@ if st.sidebar.button("Show 2025 Accuracy"):
 # === FOOTER ===
 st.markdown("---")
 st.caption("NRL Predictor v3.2 | ML + Elo + Monte Carlo | AdSense Live")
+
