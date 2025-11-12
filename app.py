@@ -9,10 +9,25 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-# Serve verification file (add after imports)
-if 'google' in st.experimental_get_query_params().to_dict().get('file', []):
-    with open('google-verification.html', 'r') as f:
-        st.markdown(f.read(), unsafe_allow_html=True)
+import streamlit as st
+# ... other imports ...
+
+# OLD (line 13 - crashing):
+# if 'google' in st.experimental_get_query_params().to_dict().get('file', []):
+
+# NEW (drop-in replacement):
+if 'google' in st.query_params.get('file', []):
+
+    # Optional: Add a debug print for logs (remove after testing)
+    st.write("Detected Google verification mode - skipping interactive elements.")
+
+    # Show a static page or just exit gracefully
+    st.title("NRL Predictor")
+    st.info("App verified. Ready for NRL 2026!")
+    st.stop()  # Halt execution to prevent UI elements from rendering
+
+# Rest of your app code continues here...
+# e.g., if st.query_params.get('round'): ... (update any other query param usages similarly)
 
 # Google Search Console Verification (Remove after indexing)
 st.markdown("""
@@ -158,6 +173,7 @@ if st.button("Predict Match"):
     else:
 
         st.error("Could not predict. Check team names.")
+
 
 
 
