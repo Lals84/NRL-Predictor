@@ -141,12 +141,7 @@ def predict_match(home, away):
         st.error(f"Prediction error: {e}")
         return None
 
-# === SIDEBAR: SEASON + 2026 ROSTER BOOSTS ===
-st.sidebar.header("NRL Predictor Settings")
-season = st.sidebar.selectbox("Season", ["2025", "2026"], index=0)
-
-use_roster_boosts = st.sidebar.checkbox("Apply 2026 Roster Changes", value=(season == "2026"))
-
+# === 2026 ROSTER BOOSTS (FIXED) ===
 if season == "2026" and use_roster_boosts:
     st.sidebar.subheader("Roster Impact (Elo Boost)")
     roster_boosts = {
@@ -154,4 +149,11 @@ if season == "2026" and use_roster_boosts:
         "Dolphins": st.sidebar.slider("Cobbo to Dolphins", -200, 200, 80),
         "Newcastle Knights": st.sidebar.slider("Dylan Brown to Knights", -200, 200, 70),
         "Sydney Roosters": st.sidebar.slider("DCE to Roosters", -200, 200, 90),
-        "South Sydney Rabbitohs":
+        "South Sydney Rabbitohs": st.sidebar.slider("Fifita to Rabbitohs", -200, 200, 85),
+        "Parramatta Eels": st.sidebar.slider("Pezet to Eels", -200, 200, 75),
+        "Gold Coast Titans": st.sidebar.slider("Fifita leaves Titans", -200, 200, -60),
+        "Melbourne Storm": st.sidebar.slider("Pezet leaves Storm", -200, 200, -70),
+    }  # <--- THIS } WAS MISSING!
+else:
+    roster_boosts = {}
+
