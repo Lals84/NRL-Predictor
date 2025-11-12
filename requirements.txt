@@ -6,3 +6,4 @@ joblib
 requests
 openpyxl
 st-paywall
+streamlit>=1.35.0,<1.40.0
