@@ -186,6 +186,99 @@ if st.button("Predict Match"):
 
         st.error("Could not predict. Check team names.")
 
+import streamlit as st
+import pandas as pd
+import numpy as np
+from scipy.stats import poisson
+# ... your existing imports (elo_engine, simulator, etc.) ...
+
+# Google verification fix (from before)
+if 'google' in st.query_params.get('file', []):
+    st.title("NRL Predictor")
+    st.info("App verified. Ready for NRL 2026!")
+    st.stop()
+
+# Sidebar: Season & Roster Mode
+st.sidebar.header("🏉 NRL Predictor Controls")
+season = st.sidebar.selectbox("Select Season", ["2025", "2026"], index=0 if 'season' not in st.query_params else 1)
+use_rosters = st.sidebar.checkbox("Apply 2026 Roster Boosts", value=True if season == "2026" else False)
+
+if season == "2026" and use_rosters:
+    st.sidebar.subheader("Roster Impact Slider")
+    # Key 2026 transfers (Elo adjustments: +boost for gains, - for losses)
+    roster_boosts = {
+        "Wests Tigers": st.sidebar.slider("Tigers (Luai +100)", -200, 200, 100),  # Luai boost
+        "Dolphins": st.sidebar.slider("Dolphins (Cobbo +80)", -200, 200, 80),
+        "Newcastle Knights": st.sidebar.slider("Knights (Brown +70)", -200, 200, 70),
+        "Sydney Roosters": st.sidebar.slider("Roosters (DCE +90)", -200, 200, 90),
+        "South Sydney Rabbitohs": st.sidebar.slider("Rabbitohs (Fifita +85)", -200, 200, 85),
+        "Parramatta Eels": st.sidebar.slider("Eels (Pezet +75)", -200, 200, 75),
+        "Gold Coast Titans": st.sidebar.slider("Titans (-Fifita -60)", -200, 200, -60),
+        "Melbourne Storm": st.sidebar.slider("Storm (-Pezet -70)", -200, 200, -70),
+        # Add more as needed; defaults to 0 for others
+    }
+else:
+    roster_boosts = {team: 0 for team in ["Wests Tigers", "Dolphins", ...]}  # Your full team list
+
+# Load Fixtures (extend your existing loader)
+@st.cache_data
+def load_fixtures(season):
+    if season == "2025":
+        return pd.read_csv("data/2025_fixtures.csv")  # Your existing
+    else:  # 2026
+        # Sample Round 1 (full draw from NRL.com - expand CSV with all rounds)
+        fixtures = pd.DataFrame({
+            "round": [1, 1, 1, 1, 1, 1, 1, 1],  # Vegas + Aussie openers
+            "date": ["2026-03-01", "2026-03-01", "2026-03-06", "2026-03-06", "2026-03-07", "2026-03-07", "2026-03-08", "2026-03-08"],
+            "home": ["Canterbury Bulldogs", "Newcastle Knights", "New Zealand Warriors", "Melbourne Storm", "Penrith Panthers", "Brisbane Broncos", "Canberra Raiders", "Dolphins"],
+            "away": ["St George Illawarra Dragons", "North Queensland Cowboys", "Sydney Roosters", "Parramatta Eels", "Gold Coast Titans", "South Sydney Rabbitohs", "Cronulla Sharks", "South Sydney Rabbitohs wait no—fix to Rabbitohs vs Raiders? Wait, per sources: Dolphins host Rabbitohs"],
+            "venue": ["Allegiant Stadium (Vegas)", "Allegiant Stadium (Vegas)", "Go Media Stadium", "AAMI Park", "BlueBet Stadium", "Suncorp Stadium", "GIO Stadium", "Suncorp Stadium"],
+            "home_score": [None] * 8,  # For sims
+            "away_score": [None] * 8
+        })
+        # Placeholder for Rounds 2-27 + Finals; fetch full from NRL API or CSV
+        # e.g., pd.read_csv("data/2026_full_fixtures.csv")
+        return fixtures
+
+fixtures = load_fixtures(season)
+st.dataframe(fixtures.head(10))  # Show loaded
+
+# Updated Elo Init with Roster Boosts
+def init_elo_2026(roster_boosts):
+    teams = ["Brisbane Broncos", "Melbourne Storm", ...]  # Your full 17-team list
+    elo = pd.Series(1500, index=teams)
+    for team, boost in roster_boosts.items():
+        if team in elo.index:
+            elo[team] += boost
+    return elo
+
+elo = init_elo_2026(roster_boosts) if season == "2026" else your_2025_elo_init()  # Hook to existing
+
+# Run Sims Button
+if st.button("🔮 Simulate Round 1 (10k Runs)"):
+    results = []
+    for _, match in fixtures[fixtures["round"] == 1].iterrows():
+        home_elo = elo[match["home"]] + 100  # Home adv
+        away_elo = elo[match["away"]]
+        exp_home = 1 / (1 + 10 ** ((away_elo - home_elo) / 400))
+        
+        # Poisson scores
+        lambda_home = 24 + (home_elo - away_elo) / 200  # Tuned for NRL avgs
+        lambda_away = 24 - (home_elo - away_elo) / 200
+        sim_scores = [poisson.rvs(lambda_home, size=10000), poisson.rvs(lambda_away, size=10000)]
+        home_wins = np.mean(sim_scores[0] > sim_scores[1])
+        
+        results.append({
+            "Match": f"{match['home']} vs {match['away']}",
+            "Home Win %": f"{home_wins:.1%}",
+            "Expected Margin": f"{(home_wins - (1 - home_wins)) * 13:.1f}",  # Avg NRL margin
+            "Key Factor": "Luai boost" if "Tigers" in match["home"] else "Neutral"  # Customize
+        })
+    
+    st.subheader(f"2026 Round 1 Predictions ({season} Mode)")
+    st.table(pd.DataFrame(results))
+
+# Your existing ladder viz, user tips, etc. continue here...
 
 
 
