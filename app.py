@@ -5,6 +5,7 @@ import numpy as np
 import os
 import requests
 import joblib
+from scipy.stats import poisson
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -17,6 +18,27 @@ import streamlit as st
 
 # NEW (drop-in replacement):
 if 'google' in st.query_params.get('file', []):
+
+    # === 2026 MODE CONTROLS ===
+st.sidebar.header("NRL Predictor Settings")
+season = st.sidebar.selectbox("Season", ["2025", "2026"], index=0)
+
+use_roster_boosts = st.sidebar.checkbox("Apply 2026 Roster Changes", value=(season == "2026"))
+
+if season == "2026" and use_roster_boosts:
+    st.sidebar.subheader("Roster Impact (Elo Boost)")
+    roster_boosts = {
+        "Wests Tigers": st.sidebar.slider("Luai to Tigers", -200, 200, 100),
+        "Dolphins": st.sidebar.slider("Cobbo to Dolphins", -200, 200, 80),
+        "Newcastle Knights": st.sidebar.slider("Dylan Brown to Knights", -200, 200, 70),
+        "Sydney Roosters": st.sidebar.slider("DCE to Roosters", -200, 200, 90),
+        "South Sydney Rabbitohs": st.sidebar.slider("Fifita to Rabbitohs", -200, 200, 85),
+        "Parramatta Eels": st.sidebar.slider("Pezet to Eels", -200, 200, 75),
+        "Gold Coast Titans": st.sidebar.slider("Fifita leaves Titans", -200, 200, -60),
+        "Melbourne Storm": st.sidebar.slider("Pezet leaves Storm", -200, 200, -70),
+    }
+else:
+    roster_boosts = {}
 
     # Optional: Add a debug print for logs (remove after testing)
     st.write("Detected Google verification mode - skipping interactive elements.")
@@ -279,6 +301,7 @@ if st.button("🔮 Simulate Round 1 (10k Runs)"):
     st.table(pd.DataFrame(results))
 
 # Your existing ladder viz, user tips, etc. continue here...
+
 
 
 
