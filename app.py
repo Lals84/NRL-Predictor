@@ -17,9 +17,13 @@ import streamlit as st
 # if 'google' in st.experimental_get_query_params().to_dict().get('file', []):
 
 # NEW (drop-in replacement):
+# === GOOGLE VERIFICATION ===
 if 'google' in st.query_params.get('file', []):
+    st.title("NRL Predictor")
+    st.info("App verified. Ready for NRL 2026!")
+    st.stop()
 
-    # === 2026 MODE CONTROLS ===
+# === SIDEBAR CONTROLS (Outside the if block!) ===
 st.sidebar.header("NRL Predictor Settings")
 season = st.sidebar.selectbox("Season", ["2025", "2026"], index=0)
 
@@ -39,14 +43,6 @@ if season == "2026" and use_roster_boosts:
     }
 else:
     roster_boosts = {}
-
-    # Optional: Add a debug print for logs (remove after testing)
-    st.write("Detected Google verification mode - skipping interactive elements.")
-
-    # Show a static page or just exit gracefully
-    st.title("NRL Predictor")
-    st.info("App verified. Ready for NRL 2026!")
-    st.stop()  # Halt execution to prevent UI elements from rendering
 
 # Rest of your app code continues here...
 # e.g., if st.query_params.get('round'): ... (update any other query param usages similarly)
@@ -301,6 +297,7 @@ if st.button("🔮 Simulate Round 1 (10k Runs)"):
     st.table(pd.DataFrame(results))
 
 # Your existing ladder viz, user tips, etc. continue here...
+
 
 
 
